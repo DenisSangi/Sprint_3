@@ -14,7 +14,7 @@ public class OrderClient extends RestAssuredClient {
                 .assertThat()
                 .statusCode(201)
                 .extract()
-                .path("track");
+                .statusCode();
     }
 
     public OrderResponse getOrder(){

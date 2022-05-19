@@ -3,13 +3,11 @@ import courier.CourierCredentials;
 import courier.CourierClient;
 import io.qameta.allure.junit4.DisplayName;
 import io.qameta.allure.Description;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
-
-public class CourierTest {
+public class CourierTestNegativeChecks {
 
     private Courier courier = Courier.getRandom();
     private Courier courierWithoutLogin = Courier.noLogin();
@@ -17,18 +15,11 @@ public class CourierTest {
     private Courier courierWithWrongLogin = Courier.wrongLogin();
     private Courier courierWithWrongPassword = Courier.wrongPassword();
 
-    private CourierClient courierClient = new CourierClient();
-    private int courierId;
+    private CourierClient courierClient;
 
-    @Test
-    @DisplayName("New courier creation test") // имя теста
-    @Description("Base test of \"/courier\" endpoint. Checking code status and response's body after correct request were send")
-    public void createCourierAndCheckResponse() {
-        boolean created = courierClient.createCourier(courier);
-        assertTrue(created);
-        CourierCredentials creds = CourierCredentials.from(courier);
-        courierId = courierClient.loginCourier(creds);
-        courierClient.delete(courierId);
+    @Before
+    public void setup(){
+        courierClient = new CourierClient();
     }
 
     @Test
@@ -52,18 +43,6 @@ public class CourierTest {
     @Description("Negative test of \"/courier\" endpoint. Checking code status and response's body after no-password request were send")
     public void createCourierWithoutPasswordAndCheckResponse() {
         courierClient.createCourierWithoutPassword(courierWithoutPassword);
-    }
-
-    @Test
-    @DisplayName("Courier successful login test") // имя теста
-    @Description("Base test of \"/courier/login\" endpoint. Checking code status and response's body after courier's login")
-    public void loginCourierCorrect() {
-        boolean created = courierClient.createCourier(courier);
-        assertTrue(created);
-        CourierCredentials creds = CourierCredentials.from(courier);
-        courierId = courierClient.loginCourier(creds);
-        assertNotEquals(0, courierId);
-        courierClient.delete(courierId);
     }
 
     @Test
